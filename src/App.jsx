@@ -11,8 +11,8 @@ import Locations from "./pages/Admin/loactions/Locations";
 import Cars from "./pages/Admin/cars/Cars";
 import Cities from "./pages/Admin/cities/Cities";
 import Models from "./pages/Admin/models/Models";
-import Settings from "./pages/Admin/Settings/Settings";
 import "./App.scss"
+import Settings from "./pages/Admin/Settings/Settings.jsx";
 
 
 export default function App() {
