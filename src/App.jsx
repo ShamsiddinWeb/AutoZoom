@@ -12,7 +12,8 @@ import Cars from "./pages/Admin/cars/Cars";
 import Cities from "./pages/Admin/cities/Cities";
 import Models from "./pages/Admin/models/Models";
 import "./App.scss"
-import Settings from "./pages/Admin/Settings/Settings.jsx";
+import Settings from "./pages/Admin/Settings/Settings";
+
 
 
 export default function App() {
