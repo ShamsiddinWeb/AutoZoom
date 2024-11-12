@@ -6,7 +6,7 @@ import { MdDeleteForever } from "react-icons/md";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 import "./Settings.scss";
 
-const Settings = () => {
+const SettingsPage= () => {
   const [categories, setCategories] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -297,4 +297,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

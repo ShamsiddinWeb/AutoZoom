@@ -12,8 +12,8 @@ import Models from "./pages/Admin/models/Models";
 import "./App.scss";
  import Outletpage from "./api/Outletpage";
 import Locations from "./pages/Admin/loactions/Locations"
-import Settings from "./pages/Admin/Settings/Settings";
-
+import SettingsPage from "./pages/Admin/SettingsPage/SettingsPage";
+ 
 export default function App() {
   return (
     <div>
@@ -24,7 +24,7 @@ export default function App() {
           <Route element={<Outletpage/>}>
             <Route element={<Layout />}> 
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/settings" element={<SettingsPage />  } />
               <Route path="/brands" element={<Brands />} />
               <Route path="/models" element={<Models />} />
               <Route path="/locations" element={<Locations/>} />
