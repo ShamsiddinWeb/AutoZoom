@@ -13,7 +13,7 @@ import Cities from "./pages/Admin/cities/Cities";
 import Models from "./pages/Admin/models/Models";
 import Settings from "./pages/Admin/Settings/Settings";
 import "./App.scss"
-// import Footer from "./components/Footer/Footer";
+
 
 export default function App() {
   return (
@@ -25,7 +25,7 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<Layout />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/settings" element={<Settings/>} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/models" element={<Models />} />
               <Route path="/locations" element={<Locations />} />
