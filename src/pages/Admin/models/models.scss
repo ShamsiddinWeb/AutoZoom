@@ -1,0 +1,107 @@
+.models-container {
+  padding-top: 70px;
+  padding-left: 200px;
+  .search-input {
+    width: 40%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+
+  .add-button {
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 5px;
+  }
+
+  .model-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .edit-button, .delete-button {
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .edit-button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      margin-right: 20px;
+      border-radius: 5px;
+    }
+
+    .delete-button {
+      background-color: #f44336;
+      color: white;
+      border: none;
+
+      border-radius: 5px;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      // text-align: center;
+
+      .form-group {
+        margin-bottom: 15px;
+
+        label {
+          display: block;
+          margin-bottom: 5px;
+          // width: 200px;
+        }
+
+        input, select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+      }
+
+      .save-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+
+      .cancel-button {
+        background-color: #f44336;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+}
