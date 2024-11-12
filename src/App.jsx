@@ -10,7 +10,7 @@ import Cars from "./pages/Admin/cars/Cars";
 import Cities from "./pages/Admin/cities/Cities";
 import Models from "./pages/Admin/models/Models";
 import "./App.scss";
-import Settings from "./pages/Admin/Settings/Settings"; 
+import Settings from "./pages/Admin/Settings/Settings.jsx";
 import Outletpage from "./api/Outletpage";
 import Locations from "./pages/Admin/loactions/Locations"
 
