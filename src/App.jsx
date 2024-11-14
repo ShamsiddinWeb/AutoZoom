@@ -13,6 +13,7 @@ import "./App.scss";
  import Outletpage from "./api/Outletpage";
 import Locations from "./pages/Admin/loactions/Locations"
 import SettingsPage from "./pages/Admin/SettingsPage/SettingsPage";
+import AddCar from "./components/AddCar/AddCar";
  
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="/locations" element={<Locations/>} />
               <Route path="/cities" element={<Cities />} />
               <Route path="/cars" element={<Cars />} />
+              <Route path="/car/add" element={<AddCar />} />
             </Route>
           </Route>
         </Routes>

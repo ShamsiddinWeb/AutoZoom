@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import CustomModal from "../../../components/CustomModal/CustomModal";
+import { toast, ToastContainer } from "react-toastify"; // Import toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import react-toastify CSS
 import "./Settings.scss";
+import not from "../../../assets/img/category__not.png";
 
-const SettingsPage= () => {
+const SettingsPage = () => {
   const [categories, setCategories] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -78,13 +81,12 @@ const SettingsPage= () => {
     })
       .then((response) => {
         if (modalType === "add") {
-  
           setCategories((prevCategories) => [
             ...prevCategories,
             response.data.data,
           ]);
+          toast.success("Category added successfully"); // Show success toast
         } else {
-        
           setCategories((prevCategories) =>
             prevCategories.map((category) =>
               category.id === selectedCategory.id
@@ -92,6 +94,7 @@ const SettingsPage= () => {
                 : category
             )
           );
+          toast.success("Category updated successfully"); // Show success toast
         }
 
         setModalOpen(false);
@@ -106,6 +109,7 @@ const SettingsPage= () => {
         });
       });
   };
+
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("modal-overlay")) {
       setModalOpen(false);
@@ -138,6 +142,7 @@ const SettingsPage= () => {
             setCategories((prevCategories) =>
               prevCategories.filter((category) => category.id !== id)
             );
+            toast.success("Category deleted successfully"); // Show success toast
 
             setCustomModal({ isOpen: false, message: "", onConfirm: null });
             setLoading(false);
@@ -171,6 +176,7 @@ const SettingsPage= () => {
 
   return (
     <div className="settings">
+      <ToastContainer position="top-right" autoClose={3000} /> {/* Toast container */}
       <input
         type="text"
         placeholder="Search..."
@@ -190,8 +196,8 @@ const SettingsPage= () => {
         Add Category
       </button>
       {loading ? (
-        <p>Loading...</p>
-      ) : (
+        <div className="spinner"></div>
+      ) : filteredCategories.length > 0 ? (
         <table className="category-table">
           <thead>
             <tr>
@@ -231,6 +237,10 @@ const SettingsPage= () => {
             ))}
           </tbody>
         </table>
+      ) : (
+        <div className="no-results">
+          <img src={not} alt="No results" />
+        </div>
       )}
 
       <CustomModal
@@ -274,6 +284,7 @@ const SettingsPage= () => {
                 <input
                   type="file"
                   name="images"
+                  required
                   onChange={(e) =>
                     setFormData({ ...formData, images: e.target.files[0] })
                   }

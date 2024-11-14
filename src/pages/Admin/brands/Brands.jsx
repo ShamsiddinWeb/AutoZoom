@@ -7,9 +7,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Brand.scss";
 import CustomModal from "../../../components/CustomModal/CustomModal";
+import not from "../../../assets/img/brand__not.png";
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
@@ -26,10 +28,17 @@ const Brands = () => {
   });
 
   const getBrands = () => {
+    setLoading(true);
     axios
       .get("https://autoapi.dezinfeksiyatashkent.uz/api/brands")
-      .then((response) => setBrands(response.data?.data))
-      .catch((error) => toast.error(error.message));
+      .then((response) => {
+        setBrands(response.data?.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -102,12 +111,20 @@ const Brands = () => {
             toast.success("Brand deleted successfully!");
           })
           .catch((error) => {
+            console.error(
+              "Delete request failed:",
+              error.response || error.message
+            );
             setCustomModal({
               isOpen: true,
-              message: `Error: ${error.message}`,
+              message: `Error deleting brand: ${
+                error.response?.data?.message || error.message
+              }`,
               onConfirm: null,
             });
-            toast.error(error.message);
+            toast.error(
+              error.response?.data?.message || "Error deleting brand"
+            );
           });
       },
     });
@@ -115,14 +132,12 @@ const Brands = () => {
 
   const handleImageChange = (e) => setImageFile(e.target.files[0]);
 
-
   const filteredBrands = brands.filter((brand) =>
     brand.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="brand-container">
-      
       <div className="brand__card">
         <input
           type="text"
@@ -142,47 +157,56 @@ const Brands = () => {
           Add Brand
         </button>
       </div>
-      <table className="brand-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBrands.map((item) => (
-            <tr key={item.id}>
-              <td>{item.title}</td>
-              <td>
-                <img
-                  src={`${imageUrl}${item.image_src}`}
-                  alt="Brand Logo"
-                  width="100"
-                />
-              </td>
-              <td>
-                <button
-                  onClick={() => handleEdit(item)}
-                  className="button edit"
-                >
-                  <FaEdit />
-                </button>
-                <button
-                  onClick={() => deleteBrand(item.id)}
-                  className="button delete"
-                >
-                  <MdDeleteForever />
-                </button>
-              </td>
+
+      {loading ? (
+        <div className="spinner"></div>
+      ) : filteredBrands.length > 0 ? (
+        <table className="brand-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Image</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredBrands.map((item) => (
+              <tr key={item.id}>
+                <td>{item.title}</td>
+                <td>
+                  <img
+                    src={`${imageUrl}${item.image_src}`}
+                    alt="Brand Logo"
+                    width="100"
+                  />
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="button edit"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => deleteBrand(item.id)}
+                    className="button delete"
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="no-results">
+          <br />
+          <img src={not} alt="No results" width={500}/>
+        </div>
+      )}
 
       <ToastContainer />
 
-    
       <CustomModal
         isOpen={customModal.isOpen}
         message={customModal.message}
@@ -194,7 +218,6 @@ const Brands = () => {
         confirmButton={!!customModal.onConfirm}
       />
 
-      
       {modalOpen && (
         <div className="modal-overlay" onClick={() => setModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -203,7 +226,6 @@ const Brands = () => {
             </h3>
             <div className="form-group">
               <label>Brand Name:</label>
-              <br />
               <input
                 type="text"
                 className="nima"

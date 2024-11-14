@@ -1,8 +1,9 @@
 import React from 'react'
-import './cars.scss'
 
-export default function Cars() {
+const Cars = () => {
   return (
-    <div><h2>Cars</h2></div>
+    <div>Cars</div>
   )
 }
+
+export default Cars

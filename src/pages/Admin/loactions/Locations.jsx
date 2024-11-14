@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import './Locations.scss'; 
-import CustomModal from "../../../components/CustomModal/CustomModal"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./Locations.scss";
+import CustomModal from "../../../components/CustomModal/CustomModal";
+import not from "../../../assets/img/404.png";
 
 const Locations = () => {
   const [cities, setCities] = useState([]);
@@ -18,7 +21,8 @@ const Locations = () => {
   });
 
   const navigate = useNavigate();
-  const urlimage = "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
+  const urlimage =
+    "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
 
   const filteredCities = cities.filter((city) =>
     city.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -29,10 +33,19 @@ const Locations = () => {
     number: index + 1,
     name: item.name,
     text: item.text,
-    images: <img style={{ width: "100px" }} src={`${urlimage}${item.image_src}`} alt={item.name} />,
+    images: (
+      <img
+        style={{ width: "100px" }}
+        src={`${urlimage}${item.image_src}`}
+        alt={item.name}
+      />
+    ),
     action: (
       <>
-        <button className="action-btn edit-btn" onClick={() => handleEdit(item)}>
+        <button
+          className="action-btn edit-btn"
+          onClick={() => handleEdit(item)}
+        >
           Edit
         </button>
         <button
@@ -54,7 +67,7 @@ const Locations = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error getting locations.", error);
+        toast.error("Error getting locations.");
         setLoading(false);
       });
   };
@@ -85,18 +98,16 @@ const Locations = () => {
             }
           )
           .then(() => {
-            setCities((prevCities) => prevCities.filter((city) => city.id !== id));
-       
+            setCities((prevCities) =>
+              prevCities.filter((city) => city.id !== id)
+            );
+            toast.success("City deleted successfully.");
             setCustomModal({ isOpen: false, message: "", onConfirm: null });
             setLoading(false);
           })
           .catch((error) => {
             setErrorMessage(`Error: ${error.message}`);
-            setCustomModal({
-              isOpen: true,
-              message: `Error: ${error.message}`,
-              onConfirm: null,
-            });
+            toast.error("Error deleting city.");
             setLoading(false);
           });
       },
@@ -105,12 +116,12 @@ const Locations = () => {
 
   const handleAdd = () => {
     setSelectedCity({
-      name: '',
-      text: '',
-      images: null
+      name: "",
+      text: "",
+      images: null,
     });
-    setVisible(true); 
-    setErrorMessage(""); 
+    setVisible(true);
+    setErrorMessage("");
   };
 
   const handleOk = () => {
@@ -134,12 +145,13 @@ const Locations = () => {
       headers: { Authorization: `Bearer ${authToken}` },
     })
       .then(() => {
-      
+        toast.success("City saved successfully.");
         setVisible(false);
         getData();
       })
       .catch((error) => {
         setErrorMessage("Error adding/updating city.");
+        toast.error("Error adding/updating city.");
       });
   };
 
@@ -149,6 +161,7 @@ const Locations = () => {
 
   return (
     <div className="cities-container">
+      <ToastContainer />
       <input
         type="text"
         className="search-input"
@@ -161,33 +174,40 @@ const Locations = () => {
         Add City
       </button>
 
-      
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      <div className="table-container">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Text</th>
-              <th>Images</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataSource.map((city) => (
-              <tr key={city.key}>
-                <td>{city.number}</td>
-                <td>{city.name}</td>
-                <td>{city.text}</td>
-                <td>{city.images}</td>
-                <td>{city.action}</td>
+      {loading ? (
+        <div className="spinner"></div>
+      ) : dataSource.length === 0 ? (
+        <div className="no-results">
+          <img src={not} alt="No results" width={500} />
+        </div>
+      ) : (
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Text</th>
+                <th>Images</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {dataSource.map((city) => (
+                <tr key={city.key}>
+                  <td>{city.number}</td>
+                  <td>{city.name}</td>
+                  <td>{city.text}</td>
+                  <td>{city.images}</td>
+                  <td>{city.action}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <CustomModal
         isOpen={customModal.isOpen}
@@ -203,28 +223,43 @@ const Locations = () => {
       {visible && (
         <div className="modal">
           <div className="modal-content">
-            <h2 className="modal__title">{selectedCity.id ? "Edit City" : "Add City"}</h2>
+            <h2 className="modal__title">
+              {selectedCity.id ? "Edit City" : "Add City"}
+            </h2>
             <div className="form-container">
               <label>Name</label>
               <input
                 type="text"
                 value={selectedCity.name}
-                onChange={(e) => setSelectedCity({ ...selectedCity, name: e.target.value })}
+                onChange={(e) =>
+                  setSelectedCity({ ...selectedCity, name: e.target.value })
+                }
               />
               <label>Text</label>
               <textarea
                 value={selectedCity.text}
-                onChange={(e) => setSelectedCity({ ...selectedCity, text: e.target.value })}
+                onChange={(e) =>
+                  setSelectedCity({ ...selectedCity, text: e.target.value })
+                }
               />
               <label>Image</label>
               <input
                 type="file"
-                onChange={(e) => setSelectedCity({ ...selectedCity, images: e.target.files[0] })}
+                onChange={(e) =>
+                  setSelectedCity({
+                    ...selectedCity,
+                    images: e.target.files[0],
+                  })
+                }
                 accept="image/jpeg, image/png"
               />
             </div>
-            <button className="modal-btn" onClick={handleOk}>Save</button>
-            <button className="modal-btns" onClick={handleCancel}>Cancel</button>
+            <button className="modal-btn" onClick={handleOk}>
+              Save
+            </button>
+            <button className="modal-btns" onClick={handleCancel}>
+              Cancel
+            </button>
           </div>
         </div>
       )}
